@@ -28,8 +28,13 @@
         text-align: center;
     }
 
-    table{
+    table {
         border: 1px solid black;
+    }
+
+    .positionSelect {
+        border: 1px solid black;
+        width: 35px;
     }
 
 </style>
@@ -41,9 +46,10 @@
 <div id="wrapper" class="fade-in">
     <!-- Intro -->
     <div id="intro">
-        <h1>⚾ Welcome to ⚾</h1><br/>
-        <h2>Vinny's Fantasy Baseball</h2>
-        <p>A free set of rotisserie player ratings and tools for the 2021 season. Updated frequently!
+        <h1>Welcome to</h1><br/>
+        <h1>⚾</h1>
+        <h2>Vinny's Fantasy Baseball</h2><br/>
+        <p>A free set of fantasy baseball player ratings and tools for the 2021 season. Updated frequently!
         <ul class="actions">
             <li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
         </ul>
@@ -63,10 +69,24 @@
     <!-- Main -->
     <div id="main">
         <div class="table-wrapper">
-            <table id="example" class="display nowrap" style="width:100%">
+
+            <div id="filter_global">
+                <h5>Position: </h5>
+                <a class="position_filter">All</a> |
+                <a class="position_filter">Hitters</a> |
+                <a class="position_filter">C</a> |
+                <a class="position_filter">1B</a> |
+                <a class="position_filter">2B</a> |
+                <a class="position_filter">3B</a> |
+                <a class="position_filter">SS</a> |
+                <a class="position_filter">2B</a> |
+                <a class="position_filter">OF</a>
+            </div>
+
+            <table id="example" class="display responsive nowrap" style="width:100%">
                 <thead>
                 <tr>
-                    <th>Z-Score</th>
+                    <th>V-Score</th>
                     <th>Player</th>
                     <th>Position</th>
                     <th>Age</th>
@@ -75,7 +95,7 @@
                 </thead>
                 <tfoot>
                 <tr>
-                    <th>Z-Score</th>
+                    <th>V-Score</th>
                     <th>Player</th>
                     <th>Position</th>
                     <th>Age</th>
@@ -125,11 +145,14 @@
     $(document).ready(function() {
         var table = $('#example').DataTable({
             ajax: './data/player_ratings.json',
+            "deferRender": true,
+            "responsive": true,
             "pageLength": 50,
             "ordering": true,
             "order": [[ 0, "desc" ]],
-             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], // page length options
-            dom: 'Blfrtip',
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], // page length options
+<!--            dom: 'Blfrtip',-->
+            dom: 'frtipB',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
@@ -166,7 +189,7 @@
                     }
                 }
             },
-            'columnDefs': [
+            columnDefs: [
                 {
                     "targets": 0,
                     "className": "dt-center",
@@ -175,7 +198,7 @@
                 {
                     "targets": 1,
                     "className": "dt-center",
-                    "orderable": true
+                    "orderable": false
                 },
                 {
                     "targets": 2,
@@ -185,43 +208,46 @@
                 {
                     "targets": 3,
                     "className": "dt-center",
-                    "orderable": true
+                    "orderable": false
                 },
                 {
-                    "targets": 3,
+                    "targets": 4,
                     "className": "dt-center",
                     "orderable": false
                 }
             ],
             columns: [
                 {
+                    data: 'zScore',
                     "render": function ( data, type, row ) {
-                        return '<b>' + row.zScore.toFixed(3) + '</b>'
+                        return '<b>' + row.zScore.toFixed(3) + '</b>';
                     }
                 },
                 {
+                    data: 'mlbPlayerId',
                     "render": function ( data, type, row ) {
                         return '<b><img src="https://content.mlb.com/images/headshots/current/60x60/' + row.mlbPlayerId + '@1x.png"> <br/>'
-                        + row.nameFirst + ' ' + row.nameLast
+                         + row.nameFirst + ' ' + row.nameLast;
                     }
                 },
                 {
+                    data: 'position',
                     "render": function ( data, type, row ) {
                         var position = row.position;
-
                         if (['LF', 'CF', 'RF'].indexOf(position) > -1) {
                             position = 'OF'
                         }
-
                         return '<b>' + position + '</b>'
                     }
                 },
                 {
+                    data: 'age',
                     "render": function ( data, type, row ) {
                         return '<b>' + row.age + '</b>'
                     }
                 },
                 {
+                    data: 'mlbPlayerId',
                     "render": function ( data, type, row ) {
                         var seasonHittingStats = row.seasonHittingStats
 
@@ -240,7 +266,7 @@
                             var slg = seasonHittingStats['slg'].toFixed(3)
                             var ops = seasonHittingStats['ops'].toFixed(3)
 
-                            return '<b>' + avg + '/' + obp + '/' + slg + '<br/> '
+                            return '<b>' + avg + '/' + obp + '/' + slg + ' '
                                     + runs + 'R '
                                     + homeRuns + 'HR '
                                     + rbis + 'RBI '
@@ -253,7 +279,33 @@
                 }
             ]
         });
+
+        $('a.position_filter').on( 'click', function () {
+            var position = $(this).text();
+
+            if(position == 'All') {
+                position = ''
+            }
+            else if(position == 'Hitters') {
+                position = ''
+            }
+
+            applyPositionFilter(position);
+        } );
+
+        function applyPositionFilter(position) {
+            var positionColumn = 2; // 3rd column
+
+
+
+            table.column( positionColumn ).search(
+                position
+            ).draw();
+
+            return false;
+        }
     });
+
 </script>
 
 </body>
