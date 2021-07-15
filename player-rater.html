@@ -27,6 +27,8 @@
         border: 1px solid black;
         width: 35px;
     }
+
+
 </style>
 
 
@@ -34,17 +36,6 @@
 
 <!-- Wrapper -->
 <div id="wrapper" class="fade-in">
-    <!-- Intro -->
-<!--    <div id="intro">-->
-<!--        <h1>Welcome to</h1><br/>-->
-<!--        <h1>⚾</h1>-->
-<!--        <h2>Vinny's Fantasy Baseball</h2><br/>-->
-<!--        <p>A free set of fantasy baseball player ratings and tools for the 2021 season. Updated frequently!-->
-<!--        <ul class="actions">-->
-<!--            <li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-
     <!-- Nav -->
     <nav id="nav">
         <ul class="links">
@@ -69,7 +60,7 @@
                 <a href="index.html"><i class="fas fa-home fa-2x"></i></a>
                 <h2>2021 Player Rater</h2>
                 <b>Last Updated:</b>
-                <span class="date"> July 13, 2021</span>
+                <span class="date"> July 15, 2021</span>
                 <div style="text-align:left">
                     <b>Filter:</b>
                     <a class="position_filter">2021</a> |
@@ -86,6 +77,7 @@
                     <b>Position: </b>
                     <a class="position_filter">All</a> |
                     <a class="position_filter">Hitters</a> |
+                    <a class="position_filter">Pitchers</a> |
                     <a class="position_filter">C</a> |
                     <a class="position_filter">1B</a> |
                     <a class="position_filter">2B</a> |
@@ -112,6 +104,25 @@
                 </tr>
                 </tfoot>
             </table>
+
+            <div style="border: 1px solid black;">
+                <b><a>V-Score Calculation:</a></b><br/>
+                <pre><b style="color:blue">HittingScore</b> = (avg * atBats)
+                    + (3 * runs)
+                    + (12 * homeRuns)
+                    + (3.5 * rbis)
+                    + (6 * stolenBases)
+<b style="color:blue">PitchingScore</b> = (5 * strikeOuts)
+                    + (3 * inningsPitched)
+                    + (10 * wins)
+                    + (15 * saves)
+                    - (4 * baseOnBalls)
+                    - (3 * hits)
+                    - (4 * earnedRuns)
+<b>RotoScore</b> = <b style="color:blue">HittingScore</b> + <b style="color:blue">PitchingScore</b>
+<b style="color:red">vScore</b> = zScore(<b>RotoScore</b>, position)
+                    </pre>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -131,6 +142,8 @@
 
 <!-- Scripts -->
 <script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
 <script src="assets/js/browser.min.js"></script>
 <script src="assets/js/breakpoints.min.js"></script>
 <script src="assets/js/util.js"></script>
@@ -159,30 +172,30 @@
             ],
             rowGroup: {
                 dataSrc: function ( row ) {
-                    var zScore = row.zScore;
+                    var vScore = row.vScore;
 
-                    if(zScore > 2) {
+                    if(vScore > 2) {
                         return '<div class="group"><b>Tier 1</b></div>';
                     }
-                    else if(zScore >= 1.5 && zScore < 2) {
+                    else if(vScore >= 1.5 && vScore < 2) {
                         return '<div class="group"><b>Tier 2</b></div>';
                     }
-                    else if(zScore >= 1 && zScore < 1.5) {
+                    else if(vScore >= 1 && vScore < 1.5) {
                         return '<div class="group"><b>Tier 3</b></div>';
                     }
-                    else if(zScore >= 0.5 && zScore < 1) {
+                    else if(vScore >= 0.5 && vScore < 1) {
                         return '<div class="group"><b>Tier 4</b></div>';
                     }
-                    else if(zScore >= 0 && zScore < 0.5) {
+                    else if(vScore >= 0 && vScore < 0.5) {
                         return '<div class="group"><b>Tier 5</b></div>';
                     }
-                    else if(zScore >= -0.5 && zScore < -0) {
+                    else if(vScore >= -0.5 && vScore < -0) {
                         return '<div class="group"><b>Tier 6</b></div>';
                     }
-                    else if(zScore >= -1 && zScore < -0.5) {
+                    else if(vScore >= -1 && vScore < -0.5) {
                         return '<div class="group"><b>Tier 7</b></div>';
                     }
-                    else if(zScore < 1) {
+                    else if(vScore < 1) {
                         return '<div class="group"><b>Tier 8</b></div>';
                     }
                     else {
@@ -219,9 +232,15 @@
             ],
             columns: [
                 {
-                    data: 'zScore',
+                    data: 'vScore',
                     "render": function ( data, type, row ) {
-                        return '<b>' + row.zScore.toFixed(3) + '</b>';
+                        var hittingScore = row.hittingScore.toFixed(2);
+                        var pitchingScore = row.pitchingScore.toFixed(2);
+                        var rotoScore = row.rotoScore.toFixed(2);
+                        return '<b style="color:red">' + row.vScore.toFixed(3) + '</b><br/>' +
+                                '<b>Roto: </b>' + rotoScore + '<br/>' +
+                                '<b style="color:blue">Hit:</b> ' + hittingScore + '<br/>' +
+                                '<b style="color:blue">Pitch:</b> ' + pitchingScore + '<br/>'
                     }
                 },
                 {
@@ -252,7 +271,8 @@
                     "render": function ( data, type, row ) {
                         var seasonHittingStats = row.seasonHittingStats
 
-                        var stats = null;
+                        var hit = '';
+                        var pitch = '';
 
                         if(seasonHittingStats != null) {
                             var hits = seasonHittingStats['hits']
@@ -267,15 +287,31 @@
                             var slg = seasonHittingStats['slg'].toFixed(3)
                             var ops = seasonHittingStats['ops'].toFixed(3)
 
-                            return '<b>' + avg + '/' + obp + '/' + slg + ' <br/>'
+                            hit = '<b>Hit: </b>' + avg + '/' + obp + '/' + slg + ' '
                                     + runs + 'R '
                                     + homeRuns + 'HR '
                                     + rbis + 'RBI '
-                                    + stolenBases + 'SB </b>'
+                                    + stolenBases + 'SB';
                         }
-                        else {
-                            return 'N/A'
+                        var seasonPitchingStats = row.seasonPitchingStats
+                        if(seasonPitchingStats != null) {
+                            var wins = seasonPitchingStats['wins']
+                            var losses = seasonPitchingStats['losses']
+                            var inningsPitched = seasonPitchingStats['inningsPitched']
+                            var era = seasonPitchingStats['era']
+                            var whip = seasonPitchingStats['whip']
+                            var saves = seasonPitchingStats['saves']
+                            var strikeOuts = seasonPitchingStats['strikeOuts']
+
+                            pitch = '<b>Pitch: </b>' + inningsPitched + 'IP ' +
+                                wins + 'W ' +
+                                saves + 'SV ' +
+                                strikeOuts + 'Ks ' +
+                                era + 'ERA ' +
+                                whip + 'WHIP ';
                         }
+
+                        return hit + '<br>' + pitch;
                     }
                 }
             ]
@@ -289,6 +325,9 @@
             }
             else if(position == 'Hitters') {
                 position = ''
+            }
+            else if(position == 'Pitchers') {
+                position = 'P'
             }
 
             applyPositionFilter(position);
