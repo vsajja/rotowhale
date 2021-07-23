@@ -27,11 +27,9 @@
         border: 1px solid black;
         width: 35px;
     }
-
-
 </style>
 
-
+<body class="is-preload">
 <body class="is-preload">
 
 <!-- Wrapper -->
@@ -60,19 +58,7 @@
                 <a href="index.html"><i class="fas fa-home fa-2x"></i></a>
                 <h2>2021 Player Rater</h2>
                 <b>Last Updated:</b>
-                <span class="date"> July 15, 2021</span>
-                <div style="text-align:left">
-                    <b>Filter:</b>
-                    <a class="position_filter">2021</a> |
-                    <a class="position_filter">Last 10 Days</a> |
-                    <a class="position_filter">Last 30 Days</a> |
-                    <a class="position_filter">1B</a> |
-                    <a class="position_filter">2B</a> |
-                    <a class="position_filter">3B</a> |
-                    <a class="position_filter">SS</a> |
-                    <a class="position_filter">2B</a> |
-                    <a class="position_filter">OF</a>
-                </div>
+                <span class="date"> July 22, 2021</span>
                 <div style="text-align:left">
                     <b>Position: </b>
                     <a class="position_filter">All</a> |
@@ -84,7 +70,8 @@
                     <a class="position_filter">3B</a> |
                     <a class="position_filter">SS</a> |
                     <a class="position_filter">2B</a> |
-                    <a class="position_filter">OF</a>
+                    <a class="position_filter">OF</a> |
+                    <a class="position_filter">DH</a>
                 </div>
                 <tr>
                     <th>V-Score</th>
@@ -324,7 +311,7 @@
                 position = ''
             }
             else if(position == 'Hitters') {
-                position = ''
+                position = 'H'
             }
             else if(position == 'Pitchers') {
                 position = 'P'
@@ -334,11 +321,19 @@
         } );
 
         function applyPositionFilter(position) {
+            console.log(position);
+
+            var playerColumn = 1; // 2nd column
             var positionColumn = 2; // 3rd column
 
-            table.column( positionColumn ).search(
-                position
-            ).draw();
+            if(position == 'H') {
+                table.column( positionColumn ).search("[^P]", true, false ).draw();
+            }
+            else {
+                table.column( positionColumn ).search(
+                    position
+                ).draw();
+            }
 
             return false;
         }
