@@ -1,14 +1,14 @@
 # mlb-player-rater
 
-The MLB Player rater is a simple front-end only project that loads player ratings from a static JSON data file and displays them using [datatables.net](https://datatables.net/).
+The **MLB Player Rater** is a simple front-end only project that loads player ratings from a static JSON data file and displays them using [datatables.net](https://datatables.net/).
 
-Datatables.net quickly adds the ability to search, filter, export and automatically group players ratings into tiers based on a calculated vScore for each position.
+Using Datatables, we can quickly add the ability to search, filter and export our data as well as automatically group players into tiers (T1, T2, T3, etc.) based on a calculated vScore for each position.
 
-A vScore is simply a zScore calculation, which allows us to compare players and their performance to date across different positions (C, 1B, 2B, etc). More on this later.
+A vScore is simply a zScore calculation, which allows us to compare players and their performance to date across different positions. More on this later.
 
-The overall website is also based on a free HTML5 Up template called [Massively](https://html5up.net/massively) to quickly get up and running. This way, it's mobile friendly and responsive without too much effort.
+The static JSON file containing the generated player ratings and vScores can be found under `data/player_ratings.json`. This file was created using a scheduled Jenkins job that consumes the MLB Stats API and does all the calculations.
 
-The static JSON file containing the generated player ratings can be found under `data/player_ratings.json`. This file was created using the MLB Stats API and some calculations.
+The overall website is also based on a free [HTML5 Up template called Massively](https://html5up.net/massively) to quickly get up and running. This way, it's mobile friendly and responsive without too much effort.
 
 # 2021 Player Rater (last updated: July 13, 2021)
 
@@ -56,16 +56,18 @@ The static JSON file containing the generated player ratings can be found under 
 
 # how is the player_ratins.json file generated?
 
-The player_ratings.json file is generated using the following steps.
+The player_ratings.json file is generated using the following basic stages.
 
-Stage 1: Use the MLB Stats API to get the current fantasy baseball player pool (40 man rosters)
+Note that this is server side pseudocode below and not included in this project. It is a high level overview for now.
+
+Stage 1: Use the MLB Stats API to get the current fantasy baseball player pool (40 man rosters) and their seasonal hitting/pitching stats
 
 1. MLB Stats API: `getMLBTeams()`
 2. MLB Stats API: `get40ManRosters(mlbTeamId)`
 3. MLB Stats API: `getPlayerHittingStats(mlbPlayerId)`
 4. MLB Stats API: `getPlayerPitchingStats(mlbPlayerId)`
 
-Stage 2: Calculate the Roto Score
+Stage 2: Calculate a hittingScore, pitchingScore and rotoScore
 
 5. Calculate: `hittingScore = calculateHittingScore(mlbPlayerId)`
 6. Calculate: `pitchingScore = calculatePitchingScore(mlbPlayerId)`
@@ -98,7 +100,6 @@ ratedCatchers = catchers.collect { catcher ->
     double rotoScore = (catcher['hittingScore'] + catcher['pitchingScore'])
 
     def vScore = ((rotoScore - mean) / standardDeviation)
-    println vScore
 
     catcher.put('vScore', vScore)
     return catcher
@@ -106,8 +107,6 @@ ratedCatchers = catchers.collect { catcher ->
 
 ratedPlayers.add(ratedCatchers)
 ```
-
-Note that this is server side pseudocode not included in this project. It is a high level overview for now.
 
 # MLB Stats API
 
