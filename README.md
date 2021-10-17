@@ -1,12 +1,20 @@
 # mlb-player-rater
 
-The MLB Player rater is a simple front-end only project that loads player ratings from a static JSON data file and displays them using [datatables.net](https://datatables.net/). The static JSON file containing the generated player ratings can be found under `data/player_ratings.json`.
+The MLB Player rater is a simple front-end only project that loads player ratings from a static JSON data file and displays them using [datatables.net](https://datatables.net/).
 
-Datatables.net quickly adds the ability to search, filter, export and automatically group players ratings into tiers based on a calculated vScore for each position. A vScore is simply a zScore calculation, which allows us to compare players and their performance to date across different positions (C, 1B, 2B, etc). More on this later.
+Datatables.net quickly adds the ability to search, filter, export and automatically group players ratings into tiers based on a calculated vScore for each position.
+
+A vScore is simply a zScore calculation, which allows us to compare players and their performance to date across different positions (C, 1B, 2B, etc). More on this later.
 
 The overall website is also based on a free HTML5 Up template called [Massively](https://html5up.net/massively) to quickly get up and running. This way, it's mobile friendly and responsive without too much effort.
 
-![2021 Player Rater](/images/player_rater_preview.png)
+The static JSON file containing the generated player ratings can be found under `data/player_ratings.json`. This file was created using the MLB Stats API and some calculations.
+
+# 2021 Player Rater (last updated: July 13, 2021)
+
+**Demo**: https://jovial-agnesi-4a50f1.netlify.app/player-rater.html
+
+[![2021 Player Rater](/images/player_rater_preview.png)](https://jovial-agnesi-4a50f1.netlify.app/player-rater.html)
 
 # data/player_ratings.json
 
