@@ -2,11 +2,9 @@
 
 The **MLB Player Rater** is a simple front-end only project that loads player ratings from a static JSON data file and displays them using [datatables.net](https://datatables.net/).
 
-Using Datatables, we can quickly add the ability to search, filter and export our data as well as automatically group players into tiers (T1, T2, T3, etc.) based on a calculated vScore for each position.
+Using Datatables, we can quickly add the ability to search, filter and export our data. We can also automatically group players into tiers (T1, T2, T3, etc.) based on a calculated vScore for each player position.
 
-A vScore is simply a zScore calculation, which allows us to compare players and their performance to date across different positions. More on this later.
-
-The static JSON file containing the generated player ratings and vScores can be found under `data/player_ratings.json`. This file was created using a scheduled Jenkins job that consumes the MLB Stats API and does all the calculations.
+A vScore is simply a zScore calculation, which allows us to compare players and their performance to date. The static JSON file containing the generated player ratings, rotoScores and vScores can be found under `data/player_ratings.json`. This file was created using a scheduled Jenkins job that consumes the MLB Stats API and does all the calculations automatically. More on this later.
 
 The overall website is also based on a free [HTML5 Up template called Massively](https://html5up.net/massively) to quickly get up and running. This way, it's mobile friendly and responsive without too much effort.
 
