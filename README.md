@@ -10,7 +10,7 @@ The overall website is also based on a free [HTML5 Up template called Massively]
 
 # 2021 Player Rater (last updated: July 13, 2021)
 
-**Demo**: https://jovial-agnesi-4a50f1.netlify.app/player-rater.html
+**Demo**: https://mlb-player-rater.netlify.app/player-rater.html
 
 [![2021 Player Rater](/images/player_rater_preview.png)](https://jovial-agnesi-4a50f1.netlify.app/player-rater.html)
 
