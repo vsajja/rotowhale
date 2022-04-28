@@ -6,8 +6,6 @@ Using Datatables, we can quickly add the ability to search, filter and export ou
 
 A vScore is simply a zScore calculation, which allows us to compare players and their performance to date. The static JSON file containing the generated player ratings, rotoScores and vScores can be found under `data/player_ratings.json`. This file was created using a scheduled Jenkins job that consumes the MLB Stats API and does all the calculations automatically. More on this later.
 
-The overall website is also based on a free [HTML5 Up template called Massively](https://html5up.net/massively) to quickly get up and running. This way, it's mobile friendly and responsive without too much effort.
-
 # 2021 Player Rater (last updated: July 13, 2021)
 
 **Demo**: https://mlb-player-rater.netlify.app/player-rater.html
@@ -56,7 +54,7 @@ The overall website is also based on a free [HTML5 Up template called Massively]
 
 The player_ratings.json file is generated using the following basic stages.
 
-Note that this is server side pseudocode below and not included in this project. It is a high level overview for now.
+Note that this is server side pseudocode below and can be found under the `pipelines` directory. It is a high level overview for now.
 
 Stage 1: Use the MLB Stats API to get the current fantasy baseball player pool (40 man rosters) and their seasonal hitting/pitching stats
 
@@ -105,6 +103,10 @@ ratedCatchers = catchers.collect { catcher ->
 
 ratedPlayers.add(ratedCatchers)
 ```
+
+# Design
+
+[HTML5 Up template called Massively](https://html5up.net/massively).
 
 # MLB Stats API
 
