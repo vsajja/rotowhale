@@ -54,8 +54,6 @@ A vScore is simply a zScore calculation, which allows us to compare players and 
 
 The player_ratings.json file is generated using the following basic stages.
 
-Server side code can be found in the `server` directory. This is pseudocode and a high level overview for now.
-
 Stage 1: Use the MLB Stats API to get the current fantasy baseball player pool (40 man rosters) and their seasonal hitting/pitching stats
 
 1. MLB Stats API: `getMLBTeams()`
