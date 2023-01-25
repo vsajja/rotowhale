@@ -8,12 +8,6 @@ Using Datatables, we can quickly add the ability to search, filter and export ou
 
 A vScore is simply a zScore calculation, which allows us to compare players and their performance to date. The static JSON file containing the generated player ratings, rotoScores and vScores can be found under `data/player_ratings.json`. This file was created using a scheduled Jenkins job that consumes the MLB Stats API and does all the calculations automatically. More on this later.
 
-# 2021 Player Rater (last updated: July 13, 2021)
-
-**Demo**: https://rotowhale.netlify.app/mlb-player-rater-2021.html
-
-[![2021 Player Rater](/images/player_rater_preview.png)](https://jovial-agnesi-4a50f1.netlify.app/player-rater.html)
-
 # data/player_ratings.json
 
 ```
