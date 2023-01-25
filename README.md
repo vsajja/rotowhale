@@ -1,6 +1,8 @@
-# mlb-player-rater
+# rotowhale
 
-The **MLB Player Rater** is a simple front-end only project that loads player ratings from a static JSON data file and displays them using [datatables.net](https://datatables.net/).
+Demo: https://mlb-player-rater.netlify.app/player-rater.html
+
+<!-- The **MLB Player Rater** is a simple front-end only project that loads player ratings from a static JSON data file and displays them using [datatables.net](https://datatables.net/).
 
 Using Datatables, we can quickly add the ability to search, filter and export our data. We can also automatically group players into tiers (T1, T2, T3, etc.) based on a calculated vScore for each player position.
 
@@ -113,4 +115,4 @@ Please note that use of MLB data from the MLB Stats API (the data/player_ratings
 ```
 
 "Copyright 2021 MLB Advanced Media, L.P. Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt"
-```
+``` -->
