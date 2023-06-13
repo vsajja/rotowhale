@@ -1,0 +1,17 @@
+version = '0.0.1-dev'
+
+task release {
+    group = 'release'
+
+    doLast {
+        exec {
+            commandLine 'cmd', '/c',
+                    "git config core.autocrlf false && " +
+                            "git add --all && " +
+                            "git commit -m \"release-${project.version}-${new Date().getTime()}\""
+        }
+        exec {
+            commandLine 'cmd', '/c', 'git push --force'
+        }
+    }
+}
